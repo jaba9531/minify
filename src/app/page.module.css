@@ -1,168 +1,276 @@
-.page {
-  --gray-rgb: 0, 0, 0;
-  --gray-alpha-200: rgba(var(--gray-rgb), 0.08);
-  --gray-alpha-100: rgba(var(--gray-rgb), 0.05);
+/* =================
+Typography
+================= */
 
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-
-  display: grid;
-  grid-template-rows: 20px 1fr 20px;
-  align-items: center;
-  justify-items: center;
-  min-height: 100svh;
-  padding: 80px;
-  gap: 64px;
-  font-family: var(--font-geist-sans);
+.playerTitle {
+  margin-top: 0;
+  margin-bottom: 1.25rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  .page {
-    --gray-rgb: 255, 255, 255;
-    --gray-alpha-200: rgba(var(--gray-rgb), 0.145);
-    --gray-alpha-100: rgba(var(--gray-rgb), 0.06);
-
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-  }
+.playerTrackName {
+  margin-top: 0;
+  margin-bottom: 0;
+  text-align: center;
 }
 
-.main {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  grid-row-start: 2;
+.playerArtistName {
+  margin-top: 0;
+  text-align: center;
+  margin-bottom: 1.5rem;
 }
 
-.main ol {
-  font-family: var(--font-geist-mono);
-  padding-left: 0;
+.queueTitle {
   margin: 0;
-  font-size: 14px;
-  line-height: 24px;
-  letter-spacing: -0.01em;
-  list-style-position: inside;
+  margin-bottom: 1.25rem;
 }
 
-.main li:not(:last-of-type) {
-  margin-bottom: 8px;
+.searchResultsTitle {
+  margin: 0;
 }
 
-.main code {
-  font-family: inherit;
-  background: var(--gray-alpha-100);
-  padding: 2px 4px;
-  border-radius: 4px;
-  font-weight: 600;
+.title {
+  margin: 0;
 }
 
-.ctas {
+.trackListArtistName {
+  font-size: 0.9rem;
+  color: var(--color-light-gray);
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.trackListTrackName {
+  font-weight: 700;
+  color: var(--color-white);
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+/* =================
+Layout
+================= */
+
+.container {
+  width: 90%;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.flexContainer {
   display: flex;
-  gap: 16px;
 }
 
-.ctas a {
-  appearance: none;
-  border-radius: 128px;
-  height: 48px;
-  padding: 0 20px;
-  border: none;
-  border: 1px solid transparent;
-  transition:
-    background 0.2s,
-    color 0.2s,
-    border-color 0.2s;
-  cursor: pointer;
+.header {
+  background-color: var(--color-dark-gray);
+  margin-top: 0;
+  margin-bottom: 1.25rem;
+}
+
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+.mainLayout {
+  padding-bottom: 100px;
+}
+
+.userAvatar {
+  border-radius: 25px;
+}
+
+/* Album Banner */
+
+.albumBanner {
+  position: relative;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
-  line-height: 20px;
-  font-weight: 500;
+  overflow: hidden;
+  border-radius: 10px;
+  margin-bottom: 1.25rem;
 }
 
-a.primary {
-  background: var(--foreground);
-  color: var(--background);
-  gap: 8px;
+.albumBanner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('../assets/images/man-on-the-moon-album-art.jpeg') no-repeat center;
+  background-size: cover;
+  filter: blur(15px) brightness(0.5);
+  z-index: 1;
 }
 
-a.secondary {
-  border-color: var(--gray-alpha-200);
-  min-width: 180px;
+.albumBanner .albumArtImage {
+  position: relative;
+  z-index: 2;
+  width: 200px;
+  height: 200px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
 }
 
-.footer {
-  grid-row-start: 3;
+/* Search Input */
+
+.searchInput {
   display: flex;
-  gap: 24px;
+  justify-content: flex-start;
+  align-items: center;
+  border: "1px solid #ccc";
+  border-radius: "5px";
+  padding: "5px 10px";
+  margin-bottom: 1.25rem;
+  width: 100%;
 }
 
-.footer a {
+/* Add back input subclass? */
+
+.musicInput {
+  padding: 12px 16px;
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--color-white);
+  background-color: var(--color-dark-gray);
+  border: none;
+  border-radius: 25px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  outline: none;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  flex: 0.25;
+}
+
+.musicInput::placeholder {
+  color: var(--color-light-gray);
+  font-style: italic;
+}
+
+.musicInput:hover,
+.musicInput:focus {
+  background-color: var(--color-medium-gray);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.musicInput:active {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Track List */
+
+.trackList {
+  background-color: var(--color-dark-gray);
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.trackListTrack {
+  padding: 1rem 0 1.25rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.trackListTrack:last-child {
+  border-bottom: none;
+}
+
+.trackListButton {
+  background-color: var(--color-green);
+  color: var(--color-white);
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.greenBackground {
+  background-color: var(--color-green);
+}
+
+.redBackground {
+  background-color: var(--color-red);
+}
+
+/* Playback Controls */
+
+.playbackControls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--color-dark-gray);
+  color: var(--color-white);
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  padding: 10px 20px;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  box-sizing: border-box;
 }
 
-.footer img {
-  flex-shrink: 0;
+.playbackContainer {
+  justify-content: center;
+  align-items: center;
 }
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
-  }
-
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
-  }
-
-  .footer a:hover {
-    text-decoration: underline;
-    text-underline-offset: 4px;
-  }
+.playbackControlElements {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  gap: 10px;
 }
 
-@media (max-width: 600px) {
-  .page {
-    padding: 32px;
-    padding-bottom: 80px;
-  }
-
-  .main {
-    align-items: center;
-  }
-
-  .main ol {
-    text-align: center;
-  }
-
-  .ctas {
-    flex-direction: column;
-  }
-
-  .ctas a {
-    font-size: 14px;
-    height: 40px;
-    padding: 0 16px;
-  }
-
-  a.secondary {
-    min-width: auto;
-  }
-
-  .footer {
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-  }
+.playbackControlElements button {
+  background-color: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--color-white);
+  cursor: pointer;
+  transition: color 0.2s;
 }
 
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
-  }
+.playbackControlElements button:hover {
+  color: var(--color-green);
+}
+
+.progressInputControl {
+  width: 300px;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.progressBar {
+  width: 100%;
+  height: 5px;
+  background: var(--color-border);
+  border: none;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  margin: 0 auto;
+}
+
+.progressBar::-webkit-slider-thumb {
+  appearance: none;
+  width: 10px;
+  height: 10px;
+  background-color: var(--color-green);
+  border-radius: 50%;
+}
+
+.progressBar::-moz-range-thumb {
+  width: 10px;
+  height: 10px;
+  background-color: var(--color-green);
+  border-radius: 50%;
 }

@@ -1,95 +1,102 @@
+'use client';
+
 import Image from "next/image";
 import styles from "./page.module.css";
+import userAvatar from "../assets/images/mock-user-avatar.jpg";
+import albumArt from "../assets/images/man-on-the-moon-album-art.jpeg";
+import { FaSearch } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
+import { useState } from "react";
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.js</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [progress, setProgress] = useState(0);
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+  const handleChange = (event) => {
+    setProgress(event.target.value);
+  };
+
+  return (
+    <>
+      <header className={styles.header}>
+        <div className={`${styles.container} ${styles.headerContainer}`}>
+          <h1 className={styles.title}>MiniFy</h1>
+          <Image
+            src={userAvatar}
+            alt="user avatar"
+            width={40}
+            height={40}
+            className={styles.userAvatar}
+          />
+        </div>
+      </header>
+      <main className={styles.mainLayout}>
+        <div className={styles.container}>
+          <h2 className={styles.playerTitle}>Now Playing:</h2>
+          <div className={styles.albumBanner}>
             <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
+              src={albumArt}
+              alt="album art"
+              className={styles.albumArtImage}
+              width={200}
+              height={200}
             />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+          </div>
+          <h2 className={styles.playerTrackName}>Innerbloom</h2>
+          <p className={styles.playerArtistName}>Rufus Du Sol</p>
+          <div className={styles.searchInput}>
+            <FaSearch style={{ color: "#ccc", marginRight: "10px" }} size={20} />
+            <input type="text" placeholder="Search" className={styles.musicInput} />
+            <ImCross style={{ color: "#ccc", marginLeft: "10px" }} size={20} />
+          </div>
+          <h2 className={styles.searchResultsTitle}>Search Results:</h2>
+          <div className={styles.trackList}>
+            <div className={styles.trackListTrack}>
+              <p className={styles.trackListTrackName}>Track Title 1</p>
+              <p className={styles.trackListArtistName}>Artist Name</p>
+              <button className={`${styles.trackListButton} ${styles.greenBackground}`}>Add to Queue</button>
+            </div>
+            <div className={styles.trackListTrack}>
+              <p className={styles.trackListTrackName}>Track Title 2</p>
+              <p className={styles.trackListArtistName}>Artist Name</p>
+              <button className={`${styles.trackListButton} ${styles.greenBackground}`}>Add to Queue</button>
+            </div>
+          </div>
+          <h2 className={styles.queueTitle}>Queue:</h2>
+          <div className={styles.trackList}>
+            <div className={styles.trackListTrack}>
+              <p className={styles.trackListTrackName}>Track Title 1</p>
+              <p className={styles.trackListArtistName}>Artist Name</p>
+              <button className={`${styles.trackListButton} ${styles.redBackground}`}>Remove From Queue</button>
+            </div>
+            <div className={styles.trackListTrack}>
+              <p className={styles.trackListTrackName}>Track Title 2</p>
+              <p className={styles.trackListArtistName}>Artist Name</p>
+              <button className={`${styles.trackListButton} ${styles.redBackground}`}>Remove From Queue</button>
+            </div>
+          </div>
         </div>
       </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      <footer>
+        <div className={styles.playbackControls}>
+          <div className={`${styles.container} ${styles.playbackContainer}`}>
+            <div className={styles.playbackControlElements}>
+              <button className={styles.prevButton}>⏮</button>
+              <button className={styles.playPauseButton}>▶️</button>
+              <button className={styles.nextButton}>⏭</button>
+            </div>
+            <div className={styles.progressInputControl}>
+              <input
+                type="range"
+                className={styles.progressBar}
+                min="0"
+                max="100"
+                value={progress}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+        </div>
       </footer>
-    </div>
+    </>
   );
 }
