@@ -4,16 +4,47 @@ import Image from "next/image";
 import styles from "./page.module.css";
 import userAvatar from "../assets/images/mock-user-avatar.jpg";
 import albumArt from "../assets/images/man-on-the-moon-album-art.jpeg";
-import { FaSearch } from "react-icons/fa";
-import { ImCross } from "react-icons/im";
+import { RxCross1 } from "react-icons/rx";
+import { HiMagnifyingGlass } from "react-icons/hi2";
 import { useEffect, useState } from "react";
 import { useAuth } from '../context/AuthContext';
-import { fetchSpotifyData } from '../utils/spotify';
+import useDebounce from '@/hooks/useDebounce';
+import { fetchSpotifyData, searchSpotify  } from '../utils/spotify';
 
 export default function Home() {
+  const [searchText, setSearchText] = useState('');
+  const debouncedSearchInput = useDebounce(searchText, 400);
+  const [songs, setSongs] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const [progress, setProgress] = useState(0);
   const [profile, setProfile] = useState(null);
   const { auth, logout } = useAuth();
+
+  const profileImage = profile?.images?.[0]?.url || userAvatar;
+
+  const handleSearch = async () => {
+    if (searchText.trim() !== '') {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await searchSpotify(auth.token, searchText, 'track');
+        setSongs(data.tracks.items);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (debouncedSearchInput) {
+      console.log(`Searching for: ${debouncedSearchInput}`);
+      handleSearch();
+    }
+  }, [debouncedSearchInput]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,13 +66,13 @@ export default function Home() {
     fetchData();
   }, []);
 
-  if (!auth.isAuthenticated || !profile) {
-    return <p>Loading...</p>;
-  }
-
   const handleChange = (event) => {
     setProgress(event.target.value);
   };
+
+  if (!auth.isAuthenticated || !profile) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>
@@ -49,7 +80,7 @@ export default function Home() {
         <div className={`${styles.container} ${styles.headerContainer}`}>
           <h1 className={styles.title}>MiniFy</h1>
           <Image
-            src={userAvatar}
+            src={profileImage}
             alt="user avatar"
             width={50}
             height={50}
@@ -72,36 +103,42 @@ export default function Home() {
           <h2 className={styles.playerTrackName}>Man on the Moon</h2>
           <p className={styles.playerArtistName}>Kid Cudi</p>
           <div className={styles.searchInput}>
-            <FaSearch style={{ color: "#ccc", marginRight: "10px" }} size={20} />
-            <input type="text" placeholder="Search" className={styles.musicInput} />
-            <ImCross style={{ color: "#ccc", marginLeft: "10px" }} size={20} />
+            <HiMagnifyingGlass
+              style={{ color: "#ccc", margin: "0px 0px 0px 10px" }}
+              size={28}
+            />
+            <input
+              type="text"
+              value={searchText}
+              placeholder="Search"
+              onChange={(e) => setSearchText(e.target.value)}
+              className={styles.musicInput}
+            />
+            {
+              searchText.trim() !== '' && (
+                <RxCross1
+                  style={{ color: "#ccc", margin: "0 12px 0 0 ", padding: "6px", cursor: "pointer" }}
+                  size={22}
+                  onClick={() => setSearchText('')}
+                />
+              )
+            }
           </div>
-          <h2 className={styles.searchResultsTitle}>Search Results:</h2>
-          <div className={styles.trackList}>
-            <div className={styles.trackListTrack}>
-              <p className={styles.trackListTrackName}>Track Title 1</p>
-              <p className={styles.trackListArtistName}>Artist Name</p>
-              <button className={`${styles.trackListButton} ${styles.greenBackground}`}>Add to Queue</button>
-            </div>
-            <div className={styles.trackListTrack}>
-              <p className={styles.trackListTrackName}>Track Title 2</p>
-              <p className={styles.trackListArtistName}>Artist Name</p>
-              <button className={`${styles.trackListButton} ${styles.greenBackground}`}>Add to Queue</button>
-            </div>
-          </div>
-          <h2 className={styles.queueTitle}>Queue:</h2>
-          <div className={styles.trackList}>
-            <div className={styles.trackListTrack}>
-              <p className={styles.trackListTrackName}>Track Title 1</p>
-              <p className={styles.trackListArtistName}>Artist Name</p>
-              <button className={`${styles.trackListButton} ${styles.redBackground}`}>Remove From Queue</button>
-            </div>
-            <div className={styles.trackListTrack}>
-              <p className={styles.trackListTrackName}>Track Title 2</p>
-              <p className={styles.trackListArtistName}>Artist Name</p>
-              <button className={`${styles.trackListButton} ${styles.redBackground}`}>Remove From Queue</button>
-            </div>
-          </div>
+          {
+            songs.length > 0 && (
+              <ul className={styles.trackList}>
+                  {
+                    songs.map((song) => (
+                      <li key={song.id} className={styles.trackListTrack}>
+                        <p className={styles.trackListTrackName}>{song.name}</p>
+                        <p className={styles.trackListArtistName}>{song.artists.map((artist) => artist.name).join(', ')}</p>
+                        <button className={`${styles.trackListButton} ${styles.greenBackground}`}>Add to Queue</button>
+                      </li>
+                    ))
+                  }
+              </ul>
+            )
+          }
         </div>
         <button onClick={logout}>Logout</button>
       </main>
