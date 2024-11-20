@@ -6,10 +6,38 @@ import userAvatar from "../assets/images/mock-user-avatar.jpg";
 import albumArt from "../assets/images/man-on-the-moon-album-art.jpeg";
 import { FaSearch } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuth } from '../context/AuthContext';
+import { fetchSpotifyData } from '../utils/spotify';
 
 export default function Home() {
   const [progress, setProgress] = useState(0);
+  const [profile, setProfile] = useState(null);
+  const { auth, logout } = useAuth();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('spotify-token='))
+        ?.split('=')[1];
+
+      if (token) {
+        try {
+          const data = await fetchSpotifyData(token, 'me');
+          setProfile(data);
+        } catch (error) {
+          console.error('Error fetching Spotify profile:', error);
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (!auth.isAuthenticated || !profile) {
+    return <p>Loading...</p>;
+  }
 
   const handleChange = (event) => {
     setProgress(event.target.value);
@@ -23,8 +51,8 @@ export default function Home() {
           <Image
             src={userAvatar}
             alt="user avatar"
-            width={40}
-            height={40}
+            width={50}
+            height={50}
             className={styles.userAvatar}
           />
         </div>
@@ -41,8 +69,8 @@ export default function Home() {
               height={200}
             />
           </div>
-          <h2 className={styles.playerTrackName}>Innerbloom</h2>
-          <p className={styles.playerArtistName}>Rufus Du Sol</p>
+          <h2 className={styles.playerTrackName}>Man on the Moon</h2>
+          <p className={styles.playerArtistName}>Kid Cudi</p>
           <div className={styles.searchInput}>
             <FaSearch style={{ color: "#ccc", marginRight: "10px" }} size={20} />
             <input type="text" placeholder="Search" className={styles.musicInput} />
@@ -75,6 +103,7 @@ export default function Home() {
             </div>
           </div>
         </div>
+        <button onClick={logout}>Logout</button>
       </main>
       <footer>
         <div className={styles.playbackControls}>
