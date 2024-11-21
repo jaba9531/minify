@@ -11,14 +11,52 @@ export const AuthProvider = ({ children }) => {
   });
 
   useEffect(() => {
-    const token = document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('spotify-token='))
-      ?.split('=')[1];
+    const getTokenFromCookie = () =>
+      document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('spotify-token='))
+        ?.split('=')[1];
 
+    const getRefreshTokenFromCookie = () =>
+      document.cookie
+        .split('; ')
+        .find((row) => row.startsWith('spotify-refresh-token='))
+        ?.split('=')[1];
+
+    const refreshAccessToken = async () => {
+      const refreshToken = getRefreshTokenFromCookie();
+      if (!refreshToken) return;
+
+      try {
+        const response = await fetch('/api/refresh-token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ refreshToken }),
+        });
+        const data = await response.json();
+
+        if (data.access_token) {
+          setAuth({ isAuthenticated: true, token: data.access_token });
+          document.cookie = `spotify-token=${data.access_token}; path=/; max-age=${data.expires_in}`;
+        } else {
+          throw new Error('Failed to refresh token');
+        }
+      } catch (error) {
+        console.error('Error refreshing token:', error);
+        logout();
+      }
+    };
+
+    const token = getTokenFromCookie();
     if (token) {
       setAuth({ isAuthenticated: true, token });
     }
+
+    const tokenRefreshInterval = setInterval(() => {
+      refreshAccessToken();
+    }, 1000 * 60 * 5); // Refresh every 5 minutes
+
+    return () => clearInterval(tokenRefreshInterval);
   }, []);
 
   const login = (token) => setAuth({ isAuthenticated: true, token });
@@ -26,6 +64,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setAuth({ isAuthenticated: false, token: null });
     document.cookie = 'spotify-token=; path=/; max-age=0;';
+    document.cookie = 'spotify-refresh-token=; path=/; max-age=0;';
     window.location.href = '/login';
   };
 
