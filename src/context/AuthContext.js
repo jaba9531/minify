@@ -36,7 +36,11 @@ export const AuthProvider = ({ children }) => {
         const data = await response.json();
 
         if (data.access_token) {
-          setAuth({ isAuthenticated: true, token: data.access_token });
+          setAuth((prevAuth) => ({
+            ...prevAuth,
+            isAuthenticated: true,
+            token: data.access_token,
+          }));
           document.cookie = `spotify-token=${data.access_token}; path=/; max-age=${data.expires_in}`;
         } else {
           throw new Error('Failed to refresh token');
@@ -54,7 +58,7 @@ export const AuthProvider = ({ children }) => {
 
     const tokenRefreshInterval = setInterval(() => {
       refreshAccessToken();
-    }, 1000 * 60 * 5); // Refresh every 5 minutes
+    }, 1000 * 60 * 50); // Refresh every 50 minutes
 
     return () => clearInterval(tokenRefreshInterval);
   }, []);

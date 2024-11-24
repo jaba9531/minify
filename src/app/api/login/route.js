@@ -7,6 +7,10 @@ export async function GET() {
     'user-read-private',
     'user-read-email',
     'playlist-read-private',
+    'streaming',
+    'user-read-playback-state',
+    'user-modify-playback-state',
+    'user-read-currently-playing',
   ].join(' ');
 
   const authUrl = `https://accounts.spotify.com/authorize?response_type=code&client_id=${clientId}&scope=${encodeURIComponent(
