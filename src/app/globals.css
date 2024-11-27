@@ -10,7 +10,9 @@ Globals
   --color-light-gray: #b3b3b3;
   --color-border: #444444;
   --color-green: #1db954;
+  --color-light-green: #1ed760;
   --color-red: #e64c4c;
+  --color-light-red: #ff4d4d;
 }
 
 body {
