@@ -73,6 +73,13 @@ Layout
   padding: 1rem 0;
 }
 
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50vh;
+}
+
 .mainLayout {
   padding-bottom: 100px;
 }

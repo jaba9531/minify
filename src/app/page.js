@@ -303,7 +303,8 @@ export default function Home() {
   };
 
   if (!auth.isAuthenticated || !profile) {
-    return <p>Loading...</p>;
+    return (
+    <div className={styles.loadingContainer}><p>Loading...</p></div>);
   }
 
   return (
