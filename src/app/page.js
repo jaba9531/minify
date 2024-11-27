@@ -322,21 +322,22 @@ export default function Home() {
       </header>
       <main className={styles.mainLayout}>
         <div className={styles.container}>
-          <h2 className={styles.playerTitle}>Now Playing:</h2>
-          {currentTrack?.album?.images?.[0]?.url ? (
-            <div className={styles.albumBanner} style={{ '--album-image': `url(${currentTrack.album.images[0].url})` }}>
-              <Image
-                src={currentTrack.album.images[0].url}
-                alt="album art"
-                className={styles.albumArtImage}
-                width={200}
-                height={200}
-              />
-            </div>
-          ) : null
-          }
-          <h2 className={styles.playerTrackName}>{currentTrack?.name || 'Track Name'}</h2>
-          <p className={styles.playerArtistName}>{currentTrack?.artists?.map(artist => artist.name).join(', ') || 'Artist Name'}</p>
+          {currentTrack && (
+            <>
+              <h2 className={styles.playerTitle}>Now Playing:</h2>
+              <div className={styles.albumBanner} style={{ '--album-image': `url(${currentTrack.album.images[0].url})` }}>
+                <Image
+                  src={currentTrack.album.images[0].url}
+                  alt="album art"
+                  className={styles.albumArtImage}
+                  width={200}
+                  height={200}
+                />
+              </div>
+              <h2 className={styles.playerTrackName}>{currentTrack?.name || 'Track Name'}</h2>
+              <p className={styles.playerArtistName}>{currentTrack?.artists?.map(artist => artist.name).join(', ') || 'Artist Name'}</p>
+            </>
+          )}
           <div className={styles.searchInput}>
             <HiMagnifyingGlass
               style={{ color: "#ccc", margin: "0px 0px 0px 10px" }}
@@ -365,8 +366,11 @@ export default function Home() {
                   {
                     songs.map((song) => (
                       <li key={song.id} className={styles.trackListTrack}>
-                        <p className={styles.trackListTrackName}>{song.name}</p>
-                        <p className={styles.trackListArtistName}>{song.artists.map((artist) => artist.name).join(', ')}</p>
+                        <div className={styles.trackListFlexContainer}>
+                        <p className={`${styles.trackListTrackName} ${styles.truncate}`}>{song.name}</p>
+                        <p className={`${styles.trackListArtistName} ${styles.truncate}`}>{song.artists.map((artist) => artist.name).join(', ')}</p>
+                        </div>
+                        <div className={styles.trackListFlexContainer}>
                         <button
                           className={`${styles.trackListButton} ${styles.playButton}`}
                           onClick={() => handlePlayTrack(song.uri)}
@@ -385,14 +389,15 @@ export default function Home() {
                           >
                           Add to Queue
                         </button>
+                        </div>
                       </li>
                     ))
                   }
               </ul>
             )
           }
+          <button className={styles.logoutButton} onClick={logout}>Logout</button>
         </div>
-        <button onClick={logout}>Logout</button>
       </main>
       <footer>
         <div className={styles.playbackControls}>

@@ -123,7 +123,6 @@ Layout
   align-items: center;
   border: "1px solid #ccc";
   padding: "5px 10px";
-  margin-bottom: 1.25rem;
   width: 100%;
   max-width: 400px;
   min-width: 270px;
@@ -131,6 +130,8 @@ Layout
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   background-color: var(--color-dark-gray);
   transition: background-color 0.3s, box-shadow 0.3s;
+  margin: 0 auto;
+  margin-bottom: 1.25rem;
 }
 
 .searchInput input {
@@ -167,14 +168,14 @@ Layout
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
   text-align: center;
-  margin: 1rem 0;
+  margin: 1rem 0 2rem 0;
   list-style-type: none;
   padding-left: 0;
 }
 
 .trackListTrack {
-  padding: 1rem 0 1.25rem 0;
   border-bottom: 1px solid var(--color-border);
+  padding: 1.2rem 0 1.2rem 0;
 }
 
 .trackListTrack:last-child {
@@ -186,11 +187,22 @@ Layout
   color: var(--color-white);
   border: none;
   border-radius: 20px;
-  padding: 8px 16px;
+  padding: 10px 25px;
   font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.2s;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 1.25rem;
+}
+
+.trackListButton:last-child {
+  margin-bottom: 0;
+}
+
+.trackListButton:hover {
+  background-color: var(--color-light-green);
 }
 
 .greenBackground {
@@ -282,5 +294,85 @@ Layout
 .progressTime {
   text-align: center;
   margin-top: 0;
-  margin-bottom: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+/* Logout Button */
+
+.logoutButton {
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 4rem;
+  padding: 10px 25px;
+  border-radius: 20px;
+  border: none;
+  color: var(--color-white);
+  background-color: var(--color-red);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.logoutButton:hover {
+  background-color: var(--color-light-red);
+}
+
+/* =================
+Media Queries
+================= */
+
+@media (min-width: 768px) {
+  .trackListTrack {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0 1rem;
+    justify-content: space-between;
+  }
+
+  .trackListTrackName {
+    margin: 0;
+  }
+
+  .trackListArtistName {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 1rem;
+  }
+
+  .trackListButton {
+    margin: 0;
+    margin-left: 1rem;
+  }
+
+  .truncate {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 200px;
+    display: block;
+  }
+
+  .trackListFlexContainer {
+    display: flex;
+  }
+}
+
+@media (min-width: 850px) {
+  .truncate {
+    max-width: 200px;
+  }
+}
+
+@media (min-width: 900px) {
+  .truncate {
+    max-width: 250px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .truncate {
+    max-width: 275px;
+  }
 }
